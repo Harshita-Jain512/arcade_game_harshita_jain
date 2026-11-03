@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fruit Catcher – 2D Arcade Game</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="arcade-wrapper">
+    <!-- Arcade Cabinet Header -->
+    <header class="arcade-header">
+      <div class="header-decor left"></div>
+      <h1 class="game-logo">FRUIT CATCHER</h1>
+      <div class="header-decor right"></div>
+    </header>
+
+    <!-- Main Game Container -->
+    <div class="game-container" id="gameContainer">
+      <!-- Heads-Up Display (HUD) -->
+      <div class="hud" id="hud">
+        <div class="hud-item score-box">
+          <span class="hud-label">SCORE</span>
+          <span class="hud-val" id="scoreDisplay">0</span>
+        </div>
+
+        <div class="hud-item timer-box">
+          <span class="hud-label">TIME</span>
+          <span class="hud-val" id="timerDisplay">60s</span>
+        </div>
+
+        <div class="hud-item lives-box">
+          <span class="hud-label">LIVES</span>
+          <div class="lives-icons" id="livesDisplay">
+            <span class="heart active">❤️</span>
+            <span class="heart active">❤️</span>
+            <span class="heart active">❤️</span>
+          </div>
+        </div>
+
+        <div class="hud-controls">
+          <button id="soundToggleBtn" class="icon-btn" title="Toggle Sound (M)" aria-label="Toggle Sound">🔊</button>
+          <button id="pauseToggleBtn" class="icon-btn" title="Pause Game (P)" aria-label="Pause Game">⏸️</button>
+        </div>
+      </div>
+
+      <!-- HTML5 Canvas for 2D Rendering -->
+      <canvas id="gameCanvas" width="800" height="600"></canvas>
+
+      <!-- Overlay: Start Screen -->
+      <div class="overlay active" id="startScreen">
+        <div class="modal-card">
+          <div class="badge-tag">2D ARCADE EDITION</div>
+          <h2 class="modal-title">FRUIT CATCHER</h2>
+          <p class="tagline">Catch sweet fruits, grab golden bonuses, and dodge lethal bombs!</p>
+
+          <div class="instructions-panel">
+            <h3>📖 How To Play</h3>
+            <div class="instruction-grid">
+              <div class="instruction-row">
+                <span class="key-combo"><kbd>◀</kbd> <kbd>▶</kbd> or <kbd>A</kbd> <kbd>D</kbd></span>
+                <span class="inst-text">Move basket left & right</span>
+              </div>
+              <div class="instruction-row">
+                <span class="fruit-icon">🍎 🍊 🍌 🍓 🍉</span>
+                <span class="inst-text">Normal Fruits: <strong>+10 pts</strong></span>
+              </div>
+              <div class="instruction-row">
+                <span class="fruit-icon">⭐ 🌟</span>
+                <span class="inst-text">Golden Fruit: <strong>+30 pts</strong></span>
+              </div>
+              <div class="instruction-row">
+                <span class="fruit-icon">💣</span>
+                <span class="inst-text">Bombs: <strong>Lose 1 Life</strong></span>
+              </div>
+            </div>
+            <div class="game-meta-hint">
+              <span>⏱️ <strong>60 Seconds</strong></span> • 
+              <span>❤️ <strong>3 Lives</strong></span> • 
+              <span>⚡ <strong>Speed increases with score</strong></span>
+            </div>
+          </div>
+
+          <!-- Theme Customization Selector (Lab Requirement) -->
+          <div class="theme-selector-box">
+            <label for="themeSelect">🎨 Theme:</label>
+            <select id="themeSelect">
+              <option value="orchard">Sunny Orchard</option>
+              <option value="sunset">Tropical Sunset</option>
+              <option value="cyber">Cyber Neon Night</option>
+            </select>
+          </div>
+
+          <button id="startGameBtn" class="arcade-btn primary-btn">PLAY GAME 🚀</button>
+        </div>
+      </div>
+
+      <!-- Overlay: Pause Screen -->
+      <div class="overlay hidden" id="pauseScreen">
+        <div class="modal-card mini-card">
+          <h2 class="modal-title">GAME PAUSED</h2>
+          <p class="pause-desc">Take a breather!</p>
+          <div class="button-group">
+            <button id="resumeGameBtn" class="arcade-btn primary-btn">RESUME ▶️</button>
+            <button id="restartFromPauseBtn" class="arcade-btn secondary-btn">RESTART 🔄</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overlay: Game Over Screen -->
+      <div class="overlay hidden" id="gameOverScreen">
+        <div class="modal-card">
+          <div class="game-over-icon" id="gameOverIcon">🏆</div>
+          <h2 class="modal-title game-over-text" id="gameOverHeading">GAME OVER</h2>
+          <p class="game-over-reason" id="gameOverReason">Time's Up!</p>
+
+          <div class="score-summary-card">
+            <div class="stat-pill">
+              <span class="stat-lbl">Final Score</span>
+              <span class="stat-num" id="finalScoreVal">0</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-lbl">High Score</span>
+              <span class="stat-num" id="highScoreVal">0</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-lbl">Fruits Caught</span>
+              <span class="stat-num" id="fruitsCaughtVal">0</span>
+            </div>
+            <div class="stat-pill">
+              <span class="stat-lbl">Accuracy</span>
+              <span class="stat-num" id="accuracyVal">100%</span>
+            </div>
+          </div>
+
+          <div id="newHighScoreBadge" class="new-high-badge hidden">🎉 NEW HIGH SCORE! 🎉</div>
+
+          <button id="restartGameBtn" class="arcade-btn primary-btn pulse-glow">PLAY AGAIN 🔄</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Arcade Footer Controls Tip -->
+    <footer class="arcade-footer">
+      <span>Use <kbd>←</kbd> <kbd>→</kbd> or <kbd>A</kbd> <kbd>D</kbd> to move | <kbd>P</kbd> to Pause | <kbd>M</kbd> to Mute</span>
+    </footer>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>

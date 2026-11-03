@@ -1,0 +1,19 @@
+{
+  "name": "fruit-catcher",
+  "version": "1.0.0",
+  "description": "Fruit Catcher - 2D Arcade Game built with HTML5, CSS3, and Pure Vanilla JavaScript",
+  "main": "index.html",
+  "scripts": {
+    "build": "node build.js",
+    "start": "npx serve dist"
+  },
+  "keywords": [
+    "arcade",
+    "game",
+    "canvas",
+    "javascript",
+    "html5"
+  ],
+  "author": "",
+  "license": "MIT"
+}
